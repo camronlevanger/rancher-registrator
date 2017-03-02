@@ -80,7 +80,7 @@ function getAgentIP(input){
         function(resolve,reject){
             var query = {
                 "method":"GET",
-                "url": "http://rancher-metadata/latest/self/host",
+                "url": "http://rancher-metadata/latest/containers/" + input.servicename,
                 "headers":{
                     "accept" : "application/json"
                 }
@@ -91,7 +91,7 @@ function getAgentIP(input){
                     reject("getAgentIP error : " + error);
                 }
 
-                input.metadata.hostIP = JSON.parse(body).agent_ip;
+                input.metadata.hostIP = JSON.parse(body).ips[0];
                 resolve(input);
             })
         }
@@ -253,7 +253,7 @@ function registerService(input){
                 var definition = {
                     "ID": id, //<uuid>:<exposed-port>[:udp if udp]
                     "Name": name,
-                    "Address": pm.address,
+                    "Address": input.metadata.hostIP,
                     "Port": parseInt(pm.publicPort)
                 };
 
