@@ -80,7 +80,7 @@ function getAgentIP(input){
         function(resolve,reject){
             var query = {
                 "method":"GET",
-                "url": "http://rancher-metadata/latest/containers/" + input.servicename,
+                "url": "http://169.254.169.254/latest/meta-data/local-ipv4",
                 "headers":{
                     "accept" : "application/json"
                 }
@@ -91,7 +91,7 @@ function getAgentIP(input){
                     reject("getAgentIP error : " + error);
                 }
 
-                input.metadata.hostIP = JSON.parse(body).ips[0];
+                input.metadata.hostIP = body;
                 resolve(input);
             })
         }
